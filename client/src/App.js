@@ -11,6 +11,7 @@ class App extends Component {
     super();
     this.captureFile = this.captureFile.bind(this);
     this.onSubmit=this.onSubmit.bind(this);
+    this.getData = this.getData.bind(this);
 
   }
 
@@ -50,16 +51,30 @@ class App extends Component {
 
   runExample = async () => {
 
-    const { accounts, contract } = this.state;
+    // const { accounts, contract } = this.state;
     // Stores a given value, 5 by default.
     // await contract.methods.set("pd").send({ from: accounts[0] });
     // Get the value from the contract to prove it worked.
-    console.log('hererere');
-    // const response = await contract.methods.get().call(accounts[0]);
+    // console.log('hererere');
+
     // 
     // Update state with the result.
     // this.setState({ ipfsHash: response });
+    // console.log('pkpkp',response);
+
   };
+
+
+  getData(){
+      const { accounts, contract } = this.state;
+      contract.methods.get().call(accounts[2]).then(
+        (res) => {
+          console.log(res);
+        }
+      )
+      
+
+  }
 
   captureFile(event)
   {
@@ -79,9 +94,10 @@ class App extends Component {
     }
   }
 
-    onSubmit(event)
+     onSubmit(event)
 
     {
+      const data=0;
     event.preventDefault();
     console.log('submit');
 
@@ -115,7 +131,22 @@ class App extends Component {
 
       // await contract.methods.set(75).send({ from: accounts[0] });
 
-      contract.methods.set(result[0].hash).send({from :accounts[0]});
+      var p = contract.methods.set(result[0].hash).send({from :accounts[0]}).then(
+        (data) =>{
+          console.log(data);
+          var c = contract.methods.get().call(accounts[2]).then(
+            (res) =>{
+              console.log(c);
+              console.log('ress',res);
+
+            }
+          )
+        }
+      );
+
+    
+
+
 
       // const response =  contract.methods.get().call(accounts[0]);
 
@@ -133,6 +164,9 @@ class App extends Component {
     // console.log('yoooo',this.state.ipfsHash);
 
   }
+
+
+  
 
   render() {
     if (!this.state.web3) {
@@ -154,9 +188,10 @@ class App extends Component {
         <form onSubmit= {this.onSubmit}>
 
             <input type = "file" onChange = {this.captureFile}/>
-            <input type = "submit"/>
-            
+            <input type = "submit"/>            
         </form>
+
+             <input type="submit" value="get" onClick={this.getData}/>
 
         </div>
     );

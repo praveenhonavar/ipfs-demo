@@ -9,6 +9,7 @@ contract SimpleStorage {
   }
 
   function get() public view returns (string memory) {
+    
     return storedData;
   }
 }
